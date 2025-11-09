@@ -1,0 +1,72 @@
+name: "Plugin CI/CD"
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Plugin version'
+        type: string
+        required: true
+      branch:
+        description: 'Branch to push version change to'
+        required: false
+        type: string
+        default: main
+
+permissions:
+  contents: write
+    
+jobs:
+  plugin:
+    runs-on: windows-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          lfs: true
+
+      - name: Set plugin version
+        shell: pwsh
+        run: ./set-version.ps1 "${{ inputs.version }}"
+
+      - name: Commit version change
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git fetch --all
+          git checkout ${{ inputs.branch }}
+          $changes = $(git status -s)
+          if ($changes) {
+            git add CMakeLists.txt
+            git commit -m "chore: bump version to ${{ inputs.version }} [skip ci]"
+            git push origin ${{ inputs.branch }}
+          } else {
+            echo "No changes to commit"
+          }
+
+      - name: Set up MSVC
+        uses: ilammy/msvc-dev-cmd@v1.13.0
+        with:
+          arch: x86
+ 
+      - name: Compile plugin
+        run: |
+          cmake . --preset MP-Release
+          cmake --build --preset MP-Release
+
+      - name: Find plugin
+        run: |
+          $plugin_dll = Get-ChildItem *.dll -Recurse | Select-Object -First 1 -ExpandProperty FullName
+          $plugin_dll = $plugin_dll.Replace((Resolve-Path ".").Path + "\", "")
+          $plugin_dll = $plugin_dll.Replace("\", "/")
+          echo "plugin_dll=$plugin_dll" >> $env:GITHUB_ENV
+          echo "Found plugin path: $plugin_dll"
+
+      - name: Create release and upload plugin
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ inputs.version }}
+          name: ${{ inputs.version }}
+          files: ${{ env.plugin_dll }}
