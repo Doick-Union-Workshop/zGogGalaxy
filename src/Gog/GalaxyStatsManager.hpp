@@ -9,7 +9,6 @@ namespace GOG
 		galaxy::api::GlobalStatsAndAchievementsStoreListener,
 		galaxy::api::GlobalAchievementChangeListener
 	{
-
 	protected:
 		static GalaxyStatsManager* singleton;
 
@@ -25,6 +24,7 @@ namespace GOG
 		void StoreAchievements();
 		void ClearAchievement(const char* achievementId);
 		void SetAchievement(const char* achievementId);
+		void ResetAchievements();
 
 	private:
 		// Callbacks

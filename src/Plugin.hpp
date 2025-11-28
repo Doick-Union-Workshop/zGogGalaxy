@@ -130,7 +130,8 @@ namespace GOTHIC_NAMESPACE
 		BetterDaedalusExternal(Gog_QueryAchievements),
 		BetterDaedalusExternal(Gog_StoreAchievements),
 		BetterDaedalusExternal(Gog_UnlockAchievement),
-		BetterDaedalusExternal(Gog_ClearAchievement)
+		BetterDaedalusExternal(Gog_ClearAchievement),
+		BetterDaedalusExternal(Gog_ResetAchievements)
 	);
 
 	/*int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd);

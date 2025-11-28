@@ -14,8 +14,6 @@ namespace GOG
 	{
 		if (singleton == nullptr)
 			singleton = new GalaxyStatsManager();
-		}
-
 		return singleton;
 	}
 
@@ -60,7 +58,6 @@ namespace GOG
 
 		static Utils::Logger* log = Utils::CreateLogger("zGogGalaxy::GalaxyStatsManager::SetAchievement");
 
-		galaxy::api::Stats()->RequestUserStatsAndAchievements(galaxy::api::User()->GetGalaxyID(), this);
 		galaxy::api::Stats()->SetAchievement(achievementId);
 		galaxy::api::Stats()->StoreStatsAndAchievements(this);
 
@@ -79,6 +76,18 @@ namespace GOG
 
 		if (const auto err = galaxy::api::GetError())
 			log->Error("Failed to clear achievement {0}: {1}", achievementId, err->GetMsg());
+	}
+
+	void GalaxyStatsManager::ResetAchievements()
+	{
+		if (!IsUserStatsReady()) return;
+
+		static Utils::Logger* log = Utils::CreateLogger("zGogGalaxy::GalaxyStatsManager::ResetAchievements");
+
+		galaxy::api::Stats()->ResetStatsAndAchievements(this);
+
+		if (const auto err = galaxy::api::GetError())
+			log->Error("Failed to reset achievements: {1}", err->GetMsg());
 	}
 
 	// Callbacks

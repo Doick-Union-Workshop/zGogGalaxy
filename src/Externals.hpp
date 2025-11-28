@@ -1,17 +1,5 @@
-#include <GalaxyApi.h>
-
 namespace GOTHIC_NAMESPACE
 {
-	static void Gog_QueryAchievements()
-	{
-		GOG::GalaxyStatsManager::GetSingleton()->QueryAchievements();
-	}
-
-    static void Gog_StoreAchievements()
-    {
-		GOG::GalaxyStatsManager::GetSingleton()->StoreAchievements();
-    }
-
 	static void Gog_UnlockAchievement(const zSTRING& t_achievementName)
 	{
         if (t_achievementName.IsEmpty()) return;
@@ -36,5 +24,10 @@ namespace GOTHIC_NAMESPACE
 	static void Gog_StoreAchievements()
 	{
 		GOG::GalaxyStatsManager::GetSingleton()->StoreAchievements();
+	}
+
+	static void Gog_ResetAchievements()
+	{
+		GOG::GalaxyStatsManager::GetSingleton()->ResetAchievements();
 	}
 }
