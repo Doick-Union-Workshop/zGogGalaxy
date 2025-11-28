@@ -18,7 +18,7 @@ namespace GOG
 		GalaxyStatsManager();
 		~GalaxyStatsManager();
 
-		bool IsUserStatsReady();
+		[[nodiscard]] bool IsUserStatsReady() const noexcept;
 
 		// Achievements
 		void QueryAchievements();

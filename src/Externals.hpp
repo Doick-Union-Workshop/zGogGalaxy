@@ -27,4 +27,14 @@ namespace GOTHIC_NAMESPACE
 		const char* name = t_achievementName.ToChar();
 		GOG::GalaxyStatsManager::GetSingleton()->ClearAchievement(name);
 	}
+
+	static void Gog_QueryAchievements()
+	{
+		GOG::GalaxyStatsManager::GetSingleton()->QueryAchievements();
+	}
+
+	static void Gog_StoreAchievements()
+	{
+		GOG::GalaxyStatsManager::GetSingleton()->StoreAchievements();
+	}
 }

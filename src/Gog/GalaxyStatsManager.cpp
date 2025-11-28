@@ -3,7 +3,7 @@
 
 namespace GOG
 {
-	GalaxyStatsManager* GalaxyStatsManager::singleton = NULL;
+	GalaxyStatsManager* GalaxyStatsManager::singleton = nullptr;
 
 	GalaxyStatsManager::GalaxyStatsManager()
 	{
@@ -12,8 +12,7 @@ namespace GOG
 
 	GalaxyStatsManager* GalaxyStatsManager::GetSingleton()
 	{
-		if (singleton == NULL)
-		{
+		if (singleton == nullptr)
 			singleton = new GalaxyStatsManager();
 		}
 
@@ -22,12 +21,12 @@ namespace GOG
 
 	GalaxyStatsManager::~GalaxyStatsManager()
 	{
-		singleton = NULL;
+		singleton = nullptr;
 	}
 
-	bool GalaxyStatsManager::IsUserStatsReady()
+	bool GalaxyStatsManager::IsUserStatsReady() const noexcept
 	{
-		return galaxy::api::Stats() != NULL;
+		return galaxy::api::Stats() != nullptr;
 	}
 
 	// Achievements
@@ -39,9 +38,8 @@ namespace GOG
 
 		galaxy::api::Stats()->RequestUserStatsAndAchievements(galaxy::api::User()->GetGalaxyID(), this);
 
-		auto err = galaxy::api::GetError();
-		if (err)
-			log->Error("Failed to query achievements: {1}", err->GetMsg());
+		if (const auto err = galaxy::api::GetError())
+			log->Error("Failed to query achievements: {0}", err->GetMsg());
 	}
 
 	void GalaxyStatsManager::StoreAchievements()
@@ -52,9 +50,8 @@ namespace GOG
 
 		galaxy::api::Stats()->StoreStatsAndAchievements(this);
 
-		auto err = galaxy::api::GetError();
-		if (err)
-			log->Error("Failed to store achievements: {1}", err->GetMsg());
+		if (const auto err = galaxy::api::GetError())
+			log->Error("Failed to store achievements: {0}", err->GetMsg());
 	}
 
 	void GalaxyStatsManager::SetAchievement(const char* achievementId)
@@ -67,8 +64,7 @@ namespace GOG
 		galaxy::api::Stats()->SetAchievement(achievementId);
 		galaxy::api::Stats()->StoreStatsAndAchievements(this);
 
-		auto err = galaxy::api::GetError();
-		if (err)
+		if (const auto err = galaxy::api::GetError())
 			log->Error("Failed to set achievement {0}: {1}", achievementId, err->GetMsg());
 	}
 
@@ -81,8 +77,7 @@ namespace GOG
 		galaxy::api::Stats()->ClearAchievement(achievementId);
 		galaxy::api::Stats()->StoreStatsAndAchievements(this);
 
-		auto err = galaxy::api::GetError();
-		if (err)
+		if (const auto err = galaxy::api::GetError())
 			log->Error("Failed to clear achievement {0}: {1}", achievementId, err->GetMsg());
 	}
 
@@ -90,13 +85,13 @@ namespace GOG
 	void GalaxyStatsManager::OnUserStatsAndAchievementsRetrieveSuccess(galaxy::api::GalaxyID userID)
 	{
 		static Utils::Logger* log = Utils::CreateLogger("zGogGalaxy::GalaxyStatsManager::OnUserStatsAndAchievementsRetrieveSuccess");
-		log->Info("User {0} stats and achievements retrieved", userID.GetRealID());
+		log->Info("Stats and achievements for user {0} retrieved", userID.GetRealID());
 	}
 
 	void GalaxyStatsManager::OnUserStatsAndAchievementsRetrieveFailure(galaxy::api::GalaxyID userID, galaxy::api::IUserStatsAndAchievementsRetrieveListener::FailureReason failureReason)
 	{
 		static Utils::Logger* log = Utils::CreateLogger("zGogGalaxy::GalaxyStatsManager::OnUserStatsAndAchievementsRetrieveFailure");
-		log->Error("User {0} stats and achievements could not be retrieved, for reason: {1}", userID.GetRealID(), failureReason);
+		log->Error("Failed to retrieve stats and achievements for user {0}, reason: {1}", userID.GetRealID(), failureReason);
 	}
 
 	void GalaxyStatsManager::OnUserStatsAndAchievementsStoreSuccess()
@@ -108,12 +103,12 @@ namespace GOG
 	void GalaxyStatsManager::OnUserStatsAndAchievementsStoreFailure(galaxy::api::IStatsAndAchievementsStoreListener::FailureReason failureReason)
 	{
 		static Utils::Logger* log = Utils::CreateLogger("zGogGalaxy::GalaxyStatsManager::OnUserStatsAndAchievementsStoreFailure");
-		log->Error("User stats and achievements could not be stored, for reason: {0}", failureReason);
+		log->Error("Failed to store user stats and achievements, reason: {0}", failureReason);
 	}
 
 	void GalaxyStatsManager::OnAchievementUnlocked(const char* name)
 	{
 		static Utils::Logger* log = Utils::CreateLogger("zGogGalaxy::GalaxyStatsManager::OnAchievementUnlocked");
-		log->Info("Achievement {0} unlocked", name);
+		log->Info("Achievement unlocked: {0}", name);
 	}
 }
