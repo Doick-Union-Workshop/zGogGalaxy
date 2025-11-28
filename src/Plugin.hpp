@@ -5,6 +5,9 @@ namespace GOTHIC_NAMESPACE
 	// NOTE! Callbacks won't be called by default, you need to uncomment
 	// hooks that will call specific callback
 
+	static const char* CLIENT_ID = "";
+	static const char* CLIENT_SECRET = "";
+
 	void Game_EntryPoint()
 	{
 
@@ -12,12 +15,15 @@ namespace GOTHIC_NAMESPACE
 
 	void Game_Init()
 	{
+		static Utils::Logger* log = Utils::CreateLogger("zGogGalaxy::Game_Init");
 
+		static auto client = GOG::GalaxyClient::GetSingleton();
+		int initStatus = client->Init(CLIENT_ID, CLIENT_SECRET);
 	}
 
 	void Game_Exit()
 	{
-
+		GOG::GalaxyStatsManager::GetSingleton()->StoreAchievements();
 	}
 
 	void Game_PreLoop()
@@ -27,7 +33,7 @@ namespace GOTHIC_NAMESPACE
 
 	void Game_Loop()
 	{
-
+		GOG::GalaxyClient::GetSingleton()->ProcessData();
 	}
 
 	void Game_PostLoop()
@@ -37,7 +43,7 @@ namespace GOTHIC_NAMESPACE
 
 	void Game_MenuLoop()
 	{
-
+		GOG::GalaxyClient::GetSingleton()->ProcessData();
 	}
 
 	void Game_SaveBegin()
@@ -120,6 +126,13 @@ namespace GOTHIC_NAMESPACE
 
 	}
 
+	BetterExternalDefinition(parser,
+		BetterDaedalusExternal(Gog_QueryAchievements),
+		BetterDaedalusExternal(Gog_StoreAchievements),
+		BetterDaedalusExternal(Gog_UnlockAchievement),
+		BetterDaedalusExternal(Gog_ClearAchievement)
+	);
+
 	/*int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd);
 	auto Hook_WinMain = Union::CreateHook(reinterpret_cast<void*>(zSwitch(0x004F3E10, 0x00506810, 0x005000F0, 0x00502D70)), &WinMain, Union::HookType::Hook_Detours);
 	int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd)
@@ -128,21 +141,21 @@ namespace GOTHIC_NAMESPACE
 		return Hook_WinMain(hInstance, hPrevInstance, lpCmdLine, nShowCmd);
 	}*/
 
-	/*void __fastcall oCGame_Init(oCGame* self, void* vtable);
+	void __fastcall oCGame_Init(oCGame* self, void* vtable);
 	auto Hook_oCGame_Init = Union::CreateHook(reinterpret_cast<void*>(zSwitch(0x00636F50, 0x0065D480, 0x006646D0, 0x006C1060)), &oCGame_Init, Union::HookType::Hook_Detours);
 	void __fastcall oCGame_Init(oCGame* self, void* vtable)
 	{
 		Hook_oCGame_Init(self, vtable);
 		Game_Init();
-	}*/
+	}
 
-	/*void __fastcall CGameManager_Done(CGameManager* self, void* vtable);
+	void __fastcall CGameManager_Done(CGameManager* self, void* vtable);
 	auto Hook_CGameManager_Done = Union::CreateHook(reinterpret_cast<void*>(zSwitch(0x00424850, 0x00427310, 0x004251A0, 0x004254E0)), &CGameManager_Done, Union::HookType::Hook_Detours);
 	void __fastcall CGameManager_Done(CGameManager* self, void* vtable)
 	{
 		Game_Exit();
 		Hook_CGameManager_Done(self, vtable);
-	}*/
+	}
 
 	/*void __fastcall oCGame_Render(oCGame* self, void* vtable);
 	auto Hook_oCGame_Render = Union::CreateHook(reinterpret_cast<void*>(zSwitch(0x0063DBE0, 0x006648F0, 0x0066B930, 0x006C86A0)), &oCGame_Render, Union::HookType::Hook_Detours);
@@ -153,21 +166,20 @@ namespace GOTHIC_NAMESPACE
 		Game_PostLoop();
 	}*/
 
-
-	/*void __fastcall oCGame_MainWorld_Render(Union::Registers& reg);
+	void __fastcall oCGame_MainWorld_Render(Union::Registers& reg);
 	auto Partial_zCWorld_Render = Union::CreatePartialHook(reinterpret_cast<void*>(zSwitch(0x0063DC76, 0x0066498B, 0x0066BA76, 0x006C87EB)), &oCGame_MainWorld_Render);
 	void __fastcall oCGame_MainWorld_Render(Union::Registers& reg)
 	{
 		Game_Loop();
-	}*/
+	}
 
-	/*void __fastcall zCMenu_Render(zCMenu* self, void* vtable);
+	void __fastcall zCMenu_Render(zCMenu* self, void* vtable);
 	auto Hook_zCMenu_Render = Union::CreateHook(reinterpret_cast<void*>(zSwitch(0x004D0DA0, 0x004E14E0, 0x004DB270, 0x004DDC20)), &zCMenu_Render, Union::HookType::Hook_Detours);
 	void __fastcall zCMenu_Render(zCMenu* self, void* vtable)
 	{
 		Hook_zCMenu_Render(self, vtable);
 		Game_MenuLoop();
-	}*/
+	}
 
 	/*void __fastcall oCGame_WriteSaveGame(oCGame* self, void* vtable, int slot, zBOOL saveGlobals);
 	auto Hook_oCGame_WriteSaveGame = Union::CreateHook(reinterpret_cast<void*>(zSwitch(0x0063AD80, 0x00661680, 0x006685D0, 0x006C5250)), &oCGame_WriteSaveGame, Union::HookType::Hook_Detours);
@@ -240,13 +252,14 @@ namespace GOTHIC_NAMESPACE
 		Game_Unpause();
 	}*/
 
-	/*void __fastcall oCGame_DefineExternals_Ulfi(oCGame* self, void* vtable, zCParser* parser);
+	void __fastcall oCGame_DefineExternals_Ulfi(oCGame* self, void* vtable, zCParser* parser);
 	auto Hook_oCGame_DefineExternals_Ulfi = Union::CreateHook(reinterpret_cast<void*>(zSwitch(0x006495B0, 0x006715F0, 0x00677A00, 0x006D4780)), &oCGame_DefineExternals_Ulfi, Union::HookType::Hook_Detours);
 	void __fastcall oCGame_DefineExternals_Ulfi(oCGame* self, void* vtable, zCParser* parser)
 	{
 		Hook_oCGame_DefineExternals_Ulfi(self, vtable, parser);
 		Game_DefineExternals();
-	}*/
+		BetterDaedalusExternals::DefineExternals();
+	}
 
 	/*void __fastcall CGameManager_ApplySomeSettings(CGameManager* self, void* vtable);
 	auto Hook_CGameManager_ApplySomeSettings = Union::CreateHook(reinterpret_cast<void*>(zSwitch(0x004267C0, 0x004291E0, 0x00427370, 0x004276B0)), &CGameManager_ApplySomeSettings, Union::HookType::Hook_Detours);
