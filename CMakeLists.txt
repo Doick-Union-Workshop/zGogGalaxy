@@ -7,7 +7,7 @@ set(GALAXY_SDK_DIR "${CMAKE_SOURCE_DIR}/dependencies/galaxy")
 include(target_add_versioninfo)
 include(galaxy)
 
-project(GothicGogWrapper
+project(zGogGalaxy
 	DESCRIPTION "Union plugin for Gothic Games"
 	VERSION 0.0.0.0
 )
@@ -22,7 +22,6 @@ file(GLOB_RECURSE SRC
 )
 
 add_library(${CMAKE_PROJECT_NAME} SHARED)
-target_sources(${CMAKE_PROJECT_NAME} PRIVATE ${SRC}  "src/Gog/GogWrapper.cpp")
 
 target_include_directories(${CMAKE_PROJECT_NAME}
     INTERFACE
