@@ -5,8 +5,8 @@ namespace GOTHIC_NAMESPACE
 	// NOTE! Callbacks won't be called by default, you need to uncomment
 	// hooks that will call specific callback
 
-	static const char* CLIENT_ID = "";
-	static const char* CLIENT_SECRET = "";
+	static char* CLIENT_ID = nullptr;
+	static char* CLIENT_SECRET = nullptr;
 
 	void Game_EntryPoint()
 	{
@@ -18,6 +18,26 @@ namespace GOTHIC_NAMESPACE
 		static Utils::Logger* log = Utils::CreateLogger("zGogGalaxy::Game_Init");
 
 		static auto client = GOG::GalaxyClient::GetSingleton();
+
+		if (!CLIENT_ID)
+		{
+			zSTRING gogClientId{ "" };
+			auto sym = parser->GetSymbol("GOG_CLIENT_ID");
+			sym->GetValue(gogClientId, 0);
+			CLIENT_ID = gogClientId.ToChar();
+		}
+
+		if (!CLIENT_SECRET)
+		{
+			zSTRING gogClientSecret{ "" };
+			auto sym = parser->GetSymbol("GOG_CLIENT_SECRET");
+			sym->GetValue(gogClientSecret, 0);
+			CLIENT_SECRET = gogClientSecret.ToChar();
+		}
+
+		if (!CLIENT_ID || !CLIENT_SECRET)
+			return;
+
 		int initStatus = client->Init(CLIENT_ID, CLIENT_SECRET);
 	}
 
