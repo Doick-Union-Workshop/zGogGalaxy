@@ -5,8 +5,8 @@ namespace GOTHIC_NAMESPACE
 	// NOTE! Callbacks won't be called by default, you need to uncomment
 	// hooks that will call specific callback
 
-	static char* CLIENT_ID = nullptr;
-	static char* CLIENT_SECRET = nullptr;
+	static zSTRING CLIENT_ID = "";
+	static zSTRING CLIENT_SECRET = "";
 
 	void Game_EntryPoint()
 	{
@@ -19,26 +19,33 @@ namespace GOTHIC_NAMESPACE
 
 		static auto client = GOG::GalaxyClient::GetSingleton();
 
-		if (!CLIENT_ID)
+		if (CLIENT_ID.IsEmpty())
 		{
-			zSTRING gogClientId{ "" };
-			auto sym = parser->GetSymbol("GOG_CLIENT_ID");
-			sym->GetValue(gogClientId, 0);
-			CLIENT_ID = gogClientId.ToChar();
+			auto index = parser->GetIndex("GOG_CLIENT_ID");
+
+			if (index > 0)
+			{
+				zSTRING gogClientId{ "" };
+				auto sym = parser->GetSymbol(index);
+				sym->GetValue(gogClientId, 0);
+				CLIENT_ID = gogClientId;
+			}
 		}
 
-		if (!CLIENT_SECRET)
+		if (CLIENT_SECRET.IsEmpty())
 		{
-			zSTRING gogClientSecret{ "" };
-			auto sym = parser->GetSymbol("GOG_CLIENT_SECRET");
-			sym->GetValue(gogClientSecret, 0);
-			CLIENT_SECRET = gogClientSecret.ToChar();
+			auto index = parser->GetIndex("GOG_CLIENT_SECRET");
+
+			if (index > 0)
+			{
+				zSTRING gogClientSecret{ "" };
+				auto sym = parser->GetSymbol(index);
+				sym->GetValue(gogClientSecret, 0);
+				CLIENT_SECRET = gogClientSecret;
+			}
 		}
 
-		if (!CLIENT_ID || !CLIENT_SECRET)
-			return;
-
-		int initStatus = client->Init(CLIENT_ID, CLIENT_SECRET);
+		int initStatus = client->Init(CLIENT_ID.ToChar(), CLIENT_SECRET.ToChar());
 	}
 
 	void Game_Exit()
