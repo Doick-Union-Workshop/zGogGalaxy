@@ -87,7 +87,7 @@ namespace GOG
 		galaxy::api::Stats()->ResetStatsAndAchievements(this);
 
 		if (const auto err = galaxy::api::GetError())
-			log->Error("Failed to reset achievements: {1}", err->GetMsg());
+			log->Error("Failed to reset achievements: {0}", err->GetMsg());
 	}
 
 	// Callbacks

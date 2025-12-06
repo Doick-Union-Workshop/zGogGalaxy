@@ -138,7 +138,6 @@ namespace GOG
 			case galaxy::api::IAuthListener::FailureReason::FAILURE_REASON_EXTERNAL_SERVICE_FAILURE:
 				GogStatus = GogInitStatus::OFFLINE;
 				break;
-
 			case galaxy::api::IAuthListener::FailureReason::FAILURE_REASON_NO_LICENSE:
 				GogStatus = GogInitStatus::PRODUCT_NOT_OWNED;
 				break;
