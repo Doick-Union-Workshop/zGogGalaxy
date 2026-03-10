@@ -15,9 +15,8 @@ namespace GOTHIC_NAMESPACE
 
 	void Game_Init()
 	{
-		static Utils::Logger* log = Utils::CreateLogger("zGogGalaxy::Game_Init");
-
-		static auto client = GOG::GalaxyClient::GetSingleton();
+		GOG::galaxyClient = std::make_unique<GOG::GalaxyClient>();
+		GOG::galaxyStatsManager = std::make_unique<GOG::GalaxyStatsManager>();
 
 		if (CLIENT_ID.IsEmpty())
 		{
@@ -26,7 +25,7 @@ namespace GOTHIC_NAMESPACE
 			if (index > 0)
 			{
 				zSTRING gogClientId{ "" };
-				auto sym = parser->GetSymbol(index);
+			auto sym = parser->GetSymbol("GOG_CLIENT_ID");
 				sym->GetValue(gogClientId, 0);
 				CLIENT_ID = gogClientId;
 			}
@@ -39,18 +38,20 @@ namespace GOTHIC_NAMESPACE
 			if (index > 0)
 			{
 				zSTRING gogClientSecret{ "" };
-				auto sym = parser->GetSymbol(index);
+			auto sym = parser->GetSymbol("GOG_CLIENT_SECRET");
 				sym->GetValue(gogClientSecret, 0);
 				CLIENT_SECRET = gogClientSecret;
 			}
 		}
 
-		int initStatus = client->Init(CLIENT_ID.ToChar(), CLIENT_SECRET.ToChar());
+		int initStatus = GOG::galaxyClient->Init(CLIENT_ID.ToChar(), CLIENT_SECRET.ToChar());
 	}
 
 	void Game_Exit()
 	{
-		GOG::GalaxyStatsManager::GetSingleton()->StoreAchievements();
+		GOG::galaxyStatsManager->StoreAchievements();
+		GOG::galaxyClient.release();
+		GOG::galaxyStatsManager.release();
 	}
 
 	void Game_PreLoop()
@@ -60,7 +61,7 @@ namespace GOTHIC_NAMESPACE
 
 	void Game_Loop()
 	{
-		GOG::GalaxyClient::GetSingleton()->ProcessData();
+		GOG::galaxyClient->ProcessData();
 	}
 
 	void Game_PostLoop()
@@ -70,7 +71,7 @@ namespace GOTHIC_NAMESPACE
 
 	void Game_MenuLoop()
 	{
-		GOG::GalaxyClient::GetSingleton()->ProcessData();
+		GOG::galaxyClient->ProcessData();
 	}
 
 	void Game_SaveBegin()

@@ -1,33 +1,33 @@
 namespace GOTHIC_NAMESPACE
 {
-	static void Gog_UnlockAchievement(const zSTRING& t_achievementName)
+	void Gog_UnlockAchievement(const zSTRING& t_achievementName)
 	{
-        if (t_achievementName.IsEmpty()) return;
-		
-		const char* name = t_achievementName.ToChar();
-		GOG::GalaxyStatsManager::GetSingleton()->SetAchievement(name);
+        if (t_achievementName.IsEmpty()) {
+			return;
+		}
+		GOG::galaxyStatsManager->SetAchievement(t_achievementName.ToChar());
 	}
 
-	static void Gog_ClearAchievement(const zSTRING& t_achievementName)
+	void Gog_ClearAchievement(const zSTRING& t_achievementName)
 	{
-		if (t_achievementName.IsEmpty()) return;
-
-		const char* name = t_achievementName.ToChar();
-		GOG::GalaxyStatsManager::GetSingleton()->ClearAchievement(name);
+		if (t_achievementName.IsEmpty()) {
+			return;
+		}
+		GOG::galaxyStatsManager->ClearAchievement(t_achievementName.ToChar());
 	}
 
-	static void Gog_QueryAchievements()
+	void Gog_QueryAchievements()
 	{
-		GOG::GalaxyStatsManager::GetSingleton()->QueryAchievements();
+		GOG::galaxyStatsManager->QueryAchievements();
 	}
 
-	static void Gog_StoreAchievements()
+	void Gog_StoreAchievements()
 	{
-		GOG::GalaxyStatsManager::GetSingleton()->StoreAchievements();
+		GOG::galaxyStatsManager->StoreAchievements();
 	}
 
-	static void Gog_ResetAchievements()
+	void Gog_ResetAchievements()
 	{
-		GOG::GalaxyStatsManager::GetSingleton()->ResetAchievements();
+		GOG::galaxyStatsManager->ResetAchievements();
 	}
 }
