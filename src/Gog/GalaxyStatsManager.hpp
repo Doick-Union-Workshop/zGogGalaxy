@@ -28,9 +28,12 @@ namespace GOG
 
 		// Callbacks
 		void OnUserStatsAndAchievementsRetrieveSuccess(galaxy::api::GalaxyID userID) override;
-		void OnUserStatsAndAchievementsRetrieveFailure(galaxy::api::GalaxyID userID, galaxy::api::IUserStatsAndAchievementsRetrieveListener::FailureReason failureReason) override;
+		void OnUserStatsAndAchievementsRetrieveFailure(
+			galaxy::api::GalaxyID userID,
+			galaxy::api::IUserStatsAndAchievementsRetrieveListener::FailureReason failureReason) override;
 		void OnUserStatsAndAchievementsStoreSuccess() override;
-		void OnUserStatsAndAchievementsStoreFailure(galaxy::api::IStatsAndAchievementsStoreListener::FailureReason failureReason) override;
+		void OnUserStatsAndAchievementsStoreFailure(
+			galaxy::api::IStatsAndAchievementsStoreListener::FailureReason failureReason) override;
 		void OnAchievementUnlocked(const char* name) override;
 	};
 
@@ -123,9 +126,14 @@ namespace GOG
 		logger->Info("Stats and achievements for user {0} retrieved", userID.GetRealID());
 	}
 
-	void GalaxyStatsManager::OnUserStatsAndAchievementsRetrieveFailure(galaxy::api::GalaxyID userID, galaxy::api::IUserStatsAndAchievementsRetrieveListener::FailureReason failureReason)
+	void GalaxyStatsManager::OnUserStatsAndAchievementsRetrieveFailure(
+		galaxy::api::GalaxyID userID,
+		galaxy::api::IUserStatsAndAchievementsRetrieveListener::FailureReason failureReason)
 	{
-		logger->Error("Failed to retrieve stats and achievements for user {0}, reason: {1}", userID.GetRealID(), failureReason);
+		logger->Error(
+			"Failed to retrieve stats and achievements for user {0}, reason: {1}",
+			userID.GetRealID(),
+			failureReason);
 	}
 
 	void GalaxyStatsManager::OnUserStatsAndAchievementsStoreSuccess()
@@ -133,7 +141,8 @@ namespace GOG
 		logger->Info("User stats and achievements stored");
 	}
 
-	void GalaxyStatsManager::OnUserStatsAndAchievementsStoreFailure(galaxy::api::IStatsAndAchievementsStoreListener::FailureReason failureReason)
+	void GalaxyStatsManager::OnUserStatsAndAchievementsStoreFailure(
+		galaxy::api::IStatsAndAchievementsStoreListener::FailureReason failureReason)
 	{
 		logger->Error("Failed to store user stats and achievements, reason: {0}", failureReason);
 	}
