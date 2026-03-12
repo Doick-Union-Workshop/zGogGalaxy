@@ -11,10 +11,6 @@ Originally developed as a tool for [Golden Gate 2: Goddess Heart](https://golden
 - [Gothic II](https://en.wikipedia.org/wiki/Gothic_II)
 - [Gothic II Night of The Raven](https://en.wikipedia.org/wiki/Gothic_II:_Night_of_the_Raven)
 
-## Documentation
-
-For more information about GOG Galaxy SDK and its capabilities, see the [GOG Galaxy SDK Documentation](https://docs.gog.com/sdk/).
-
 ## Support
 
 If you have found a bug in zGogGalaxy, please [create an issue](https://github.com/Doick-Union-Workshop/zGogGalaxy/issues/new).
