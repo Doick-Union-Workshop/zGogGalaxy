@@ -20,8 +20,6 @@ namespace GOG
 		void ResetAchievements();
 
 	private:
-		inline static Utils::Logger* logger = Utils::CreateLogger("zGogGalaxy::GalaxyStatsManager");
-
 		// Callbacks
 		void OnUserStatsAndAchievementsRetrieveSuccess(galaxy::api::GalaxyID userID) override;
 		void OnUserStatsAndAchievementsRetrieveFailure(
@@ -58,7 +56,9 @@ namespace GOG
 
 		galaxy::api::Stats()->RequestUserStatsAndAchievements(galaxy::api::User()->GetGalaxyID(), this);
 
-		if (const auto err = galaxy::api::GetError()) {
+		if (const auto err = galaxy::api::GetError())
+		{
+			static Utils::Logger* logger = Utils::CreateLogger("zGogGalaxy::GalaxyStatsManager::QueryAchievements");
 			logger->Error("Failed to query achievements: {0}", err->GetMsg());
 		}
 	}
@@ -74,6 +74,7 @@ namespace GOG
 
 		if (const auto err = galaxy::api::GetError())
 		{
+			static Utils::Logger* logger = Utils::CreateLogger("zGogGalaxy::GalaxyStatsManager::StoreAchievements");
 			logger->Error("Failed to store achievements: {0}", err->GetMsg());
 		}
 	}
@@ -90,6 +91,7 @@ namespace GOG
 
 		if (const auto err = galaxy::api::GetError())
 		{
+			static Utils::Logger* logger = Utils::CreateLogger("zGogGalaxy::GalaxyStatsManager::SetAchievement");
 			logger->Error("Failed to set achievement {0}: {1}", achievementId, err->GetMsg());
 		}
 	}
@@ -106,6 +108,7 @@ namespace GOG
 
 		if (const auto err = galaxy::api::GetError())
 		{
+			static Utils::Logger* logger = Utils::CreateLogger("zGogGalaxy::GalaxyStatsManager::ClearAchievement");
 			logger->Error("Failed to clear achievement {0}: {1}", achievementId, err->GetMsg());
 		}
 	}
@@ -121,6 +124,7 @@ namespace GOG
 
 		if (const auto err = galaxy::api::GetError())
 		{
+			static Utils::Logger* logger = Utils::CreateLogger("zGogGalaxy::GalaxyStatsManager::ResetAchievements");
 			logger->Error("Failed to reset achievements: {0}", err->GetMsg());
 		}
 	}
@@ -128,6 +132,7 @@ namespace GOG
 	// Callbacks
 	void GalaxyStatsManager::OnUserStatsAndAchievementsRetrieveSuccess(galaxy::api::GalaxyID userID)
 	{
+		static Utils::Logger* logger = Utils::CreateLogger("zGogGalaxy::GalaxyStatsManager::OnUserStatsAndAchievementsRetrieveSuccess");
 		logger->Info("Stats and achievements for user {0} retrieved", userID.GetRealID());
 	}
 
@@ -135,6 +140,7 @@ namespace GOG
 		galaxy::api::GalaxyID userID,
 		galaxy::api::IUserStatsAndAchievementsRetrieveListener::FailureReason failureReason)
 	{
+		static Utils::Logger* logger = Utils::CreateLogger("zGogGalaxy::GalaxyStatsManager::OnUserStatsAndAchievementsRetrieveFailure");
 		logger->Error(
 			"Failed to retrieve stats and achievements for user {0}, reason: {1}",
 			userID.GetRealID(),
@@ -143,17 +149,20 @@ namespace GOG
 
 	void GalaxyStatsManager::OnUserStatsAndAchievementsStoreSuccess()
 	{
+		static Utils::Logger* logger = Utils::CreateLogger("zGogGalaxy::GalaxyStatsManager::OnUserStatsAndAchievementsStoreSuccess");
 		logger->Info("User stats and achievements stored");
 	}
 
 	void GalaxyStatsManager::OnUserStatsAndAchievementsStoreFailure(
 		galaxy::api::IStatsAndAchievementsStoreListener::FailureReason failureReason)
 	{
+		static Utils::Logger* logger = Utils::CreateLogger("zGogGalaxy::GalaxyStatsManager::OnUserStatsAndAchievementsStoreFailure");
 		logger->Error("Failed to store user stats and achievements, reason: {0}", failureReason);
 	}
 
 	void GalaxyStatsManager::OnAchievementUnlocked(const char* name)
 	{
+		static Utils::Logger* logger = Utils::CreateLogger("zGogGalaxy::GalaxyStatsManager::OnAchievementUnlocked");
 		logger->Info("Achievement unlocked: {0}", name);
 	}
 }

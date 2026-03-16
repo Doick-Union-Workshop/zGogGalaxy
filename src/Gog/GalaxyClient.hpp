@@ -28,7 +28,6 @@ namespace GOG
 
 	private:
 		int GogStatus = GogInitStatus::NOT_INSTALLED;
-		inline static Utils::Logger* logger = Utils::CreateLogger("zGogGalaxy::GalaxyClient");
 
 		// Callbacks
 		void OnAuthSuccess() override;
@@ -50,11 +49,11 @@ namespace GOG
 
 	int GalaxyClient::Init(const char* clientId, const char* clientSecret, bool online)
 	{
-		logger->Info("Initializing GOG Galaxy...");
 		galaxy::api::Init({ clientId, clientSecret });
 
 		if (const auto err = galaxy::api::GetError())
 		{
+			static Utils::Logger* logger = Utils::CreateLogger("zGogGalaxy::GalaxyClient::Init");
 			logger->Error("GOG Galaxy not installed: {0}", err->GetMsg());
 			GogStatus = GogInitStatus::NOT_INSTALLED;
 		}
@@ -106,12 +105,13 @@ namespace GOG
 			return;
 		}
 
-		logger->Info("Signing in...");
+		static Utils::Logger* logger = Utils::CreateLogger("zGogGalaxy::GalaxyClient::SignIn");
+
 		galaxy::api::User()->SignInGalaxy(online, 15U, this);
 
 		if (const auto err = galaxy::api::GetError())
 		{
-			logger->Error("Signing in error: {0}", err->GetMsg());
+			logger->Error("Signing in failed: {0}", err->GetMsg());
 			GogStatus = GogInitStatus::PRODUCT_NOT_OWNED;
 		}
 		else if (online) {
@@ -120,7 +120,7 @@ namespace GOG
 		else
 		{
 			GogStatus = GogInitStatus::OFFLINE;
-			logger->Info("Signed in offline");
+			logger->Info("Signed in offline mode");
 		}
 	}
 
@@ -158,12 +158,17 @@ namespace GOG
 	void GalaxyClient::OnAuthSuccess()
 	{
 		GogStatus = GogInitStatus::OK;
+
+		static Utils::Logger* logger = Utils::CreateLogger("zGogGalaxy::GalaxyClient::OnAuthSuccess");
 		logger->Info("GOG Galaxy successfully initialized");
+
 		GOG::galaxyStatsManager->QueryAchievements();
 	}
 
 	void GalaxyClient::OnAuthFailure(galaxy::api::IAuthListener::FailureReason reason)
 	{
+		static Utils::Logger* logger = Utils::CreateLogger("zGogGalaxy::GalaxyClient::OnAuthFailure");
+
 		switch (reason)
 		{
 		case galaxy::api::IAuthListener::FailureReason::FAILURE_REASON_GALAXY_NOT_INITIALIZED:
@@ -189,6 +194,8 @@ namespace GOG
 	{
 		galaxy::api::User()->SignOut();
 		GogStatus = GogInitStatus::OFFLINE;
+
+		static Utils::Logger* logger = Utils::CreateLogger("zGogGalaxy::GalaxyClient::OnAuthLost");
 		logger->Error("GOG Galaxy not initialized, call Init() first!");
 	}
 }
