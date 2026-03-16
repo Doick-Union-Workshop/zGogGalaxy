@@ -5,9 +5,6 @@ namespace GOTHIC_NAMESPACE
 	// NOTE! Callbacks won't be called by default, you need to uncomment
 	// hooks that will call specific callback
 
-	inline zSTRING clientID = "";
-	inline zSTRING clientSecret = "";
-
 	void Game_EntryPoint()
 	{
 
@@ -18,31 +15,10 @@ namespace GOTHIC_NAMESPACE
 		GOG::galaxyClient = std::make_unique<GOG::GalaxyClient>();
 		GOG::galaxyStatsManager = std::make_unique<GOG::GalaxyStatsManager>();
 
-		if (clientID.IsEmpty())
-		{
-			zSTRING gogClientId{""};
-			auto clientIdSymbol = parser->GetSymbol("GOG_CLIENT_ID");
-
-			if (clientIdSymbol)
-			{
-				clientIdSymbol->GetValue(gogClientId, 0);
-				clientID = gogClientId;
-			}
-		}
-
-		if (clientSecret.IsEmpty())
-		{
-			zSTRING gogClientSecret{""};
-			auto clientSecretSymbol = parser->GetSymbol("GOG_CLIENT_SECRET");
-
-			if (clientSecretSymbol)
-			{
-				clientSecretSymbol->GetValue(gogClientSecret, 0);
-				clientSecret = gogClientSecret;
-			}
-		}
-
-		int initStatus = GOG::galaxyClient->Init(clientID.ToChar(), clientSecret.ToChar());
+		GOG::galaxyClient->Init(
+			GOG::CLIENT_ID.data(),
+			GOG::CLIENT_SECRET.data()
+		);
 	}
 
 	void Game_Exit()

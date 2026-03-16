@@ -2,17 +2,11 @@ namespace GOTHIC_NAMESPACE
 {
 	void Gog_UnlockAchievement(const zSTRING& t_achievementName)
 	{
-        if (t_achievementName.IsEmpty()) {
-			return;
-		}
 		GOG::galaxyStatsManager->SetAchievement(t_achievementName.ToChar());
 	}
 
 	void Gog_ClearAchievement(const zSTRING& t_achievementName)
 	{
-		if (t_achievementName.IsEmpty()) {
-			return;
-		}
 		GOG::galaxyStatsManager->ClearAchievement(t_achievementName.ToChar());
 	}
 

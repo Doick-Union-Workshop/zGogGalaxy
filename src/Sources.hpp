@@ -6,6 +6,8 @@
 // GOG Galaxy
 #include "Gog/GalaxyStatsManager.hpp"
 #include "Gog/GalaxyClient.hpp"
+#include "Gog/GalaxyGlobals.hpp"
 
+// Gothic
 #include "Externals.hpp"
 #include "Plugin.hpp"

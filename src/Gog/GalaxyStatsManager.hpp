@@ -1,9 +1,5 @@
 #pragma once
 
-#include <GalaxyApi.h>
-#include <cstdint>
-#include <memory>
-
 namespace GOG
 {
 	class GalaxyStatsManager : public galaxy::api::GlobalUserStatsAndAchievementsRetrieveListener,
@@ -55,7 +51,8 @@ namespace GOG
 	// Achievements
 	void GalaxyStatsManager::QueryAchievements()
 	{
-		if (!IsUserStatsReady()) {
+		if (!IsUserStatsReady())
+		{
 			return;
 		}
 
@@ -68,54 +65,62 @@ namespace GOG
 
 	void GalaxyStatsManager::StoreAchievements()
 	{
-		if (!IsUserStatsReady()) {
+		if (!IsUserStatsReady())
+		{
 			return;
 		}
 
 		galaxy::api::Stats()->StoreStatsAndAchievements(this);
 
-		if (const auto err = galaxy::api::GetError()) {
+		if (const auto err = galaxy::api::GetError())
+		{
 			logger->Error("Failed to store achievements: {0}", err->GetMsg());
 		}
 	}
 
 	void GalaxyStatsManager::SetAchievement(const char* achievementId)
 	{
-		if (!IsUserStatsReady()) {
+		if (!IsUserStatsReady())
+		{
 			return;
 		}
 
 		galaxy::api::Stats()->SetAchievement(achievementId);
 		galaxy::api::Stats()->StoreStatsAndAchievements(this);
 
-		if (const auto err = galaxy::api::GetError()) {
+		if (const auto err = galaxy::api::GetError())
+		{
 			logger->Error("Failed to set achievement {0}: {1}", achievementId, err->GetMsg());
 		}
 	}
 
 	void GalaxyStatsManager::ClearAchievement(const char* achievementId)
 	{
-		if (!IsUserStatsReady()) {
+		if (!IsUserStatsReady())
+		{
 			return;
 		}
 
 		galaxy::api::Stats()->ClearAchievement(achievementId);
 		galaxy::api::Stats()->StoreStatsAndAchievements(this);
 
-		if (const auto err = galaxy::api::GetError()) {
+		if (const auto err = galaxy::api::GetError())
+		{
 			logger->Error("Failed to clear achievement {0}: {1}", achievementId, err->GetMsg());
 		}
 	}
 
 	void GalaxyStatsManager::ResetAchievements()
 	{
-		if (!IsUserStatsReady()) {
+		if (!IsUserStatsReady())
+		{
 			return;
 		}
 
 		galaxy::api::Stats()->ResetStatsAndAchievements(this);
 
-		if (const auto err = galaxy::api::GetError()) {
+		if (const auto err = galaxy::api::GetError())
+		{
 			logger->Error("Failed to reset achievements: {0}", err->GetMsg());
 		}
 	}

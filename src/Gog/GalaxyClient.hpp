@@ -1,9 +1,5 @@
 #pragma once
 
-#include <GalaxyApi.h>
-#include <cstdint>
-#include <memory>
-
 namespace GOG
 {
 	class GalaxyClient : public galaxy::api::GlobalAuthListener
@@ -73,33 +69,40 @@ namespace GOG
 
 	void GalaxyClient::ProcessData()
 	{
-		if (GogStatus == GogInitStatus::NOT_INSTALLED) {
+		if (GogStatus == GogInitStatus::NOT_INSTALLED)
+		{
 			return;
 		}
+
 		galaxy::api::ProcessData();
 	}
 
 	void GalaxyClient::Shutdown()
 	{
-		if (GogStatus < GogInitStatus::OFFLINE) {
+		if (GogStatus < GogInitStatus::OFFLINE)
+		{
 			return;
 		}
+
 		galaxy::api::Shutdown();
 	}
 
 	// User
 	uint64_t GalaxyClient::GetGalaxyID() const
 	{
-		if (GogStatus < GogInitStatus::OFFLINE) {
+		if (GogStatus < GogInitStatus::OFFLINE)
+		{
 			return 0;
 		}
+
 		galaxy::api::GalaxyID galaxyID = galaxy::api::User()->GetGalaxyID();
 		return galaxyID.GetRealID();
 	}
 
 	void GalaxyClient::SignIn(bool online)
 	{
-		if (GogStatus == GogInitStatus::NOT_INSTALLED) {
+		if (GogStatus == GogInitStatus::NOT_INSTALLED)
+		{
 			return;
 		}
 
@@ -123,25 +126,31 @@ namespace GOG
 
 	void GalaxyClient::SignOut()
 	{
-		if (GogStatus < GogInitStatus::OFFLINE) {
+		if (GogStatus < GogInitStatus::OFFLINE)
+		{
 			return;
 		}
+
 		galaxy::api::User()->SignOut();
 	}
 
 	bool GalaxyClient::IsSignedIn() const
 	{
-		if (GogStatus < GogInitStatus::OFFLINE) {
+		if (GogStatus < GogInitStatus::OFFLINE)
+		{
 			return false;
 		}
+
 		return galaxy::api::User()->SignedIn();
 	}
 
 	bool GalaxyClient::IsLoggedOut() const
 	{
-		if (GogStatus < GogInitStatus::OFFLINE) {
+		if (GogStatus < GogInitStatus::OFFLINE)
+		{
 			return true;
 		}
+
 		return !galaxy::api::User()->IsLoggedOn();
 	}
 

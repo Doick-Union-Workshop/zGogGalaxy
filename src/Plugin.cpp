@@ -3,6 +3,9 @@
 
 #include <Union/Hook.h>
 #include <ZenGin/zGothicAPI.h>
+#include <GalaxyApi.h>
+#include <cstdint>
+#include <memory>
 
 #ifdef __G1
 #define GOTHIC_NAMESPACE Gothic_I_Classic
