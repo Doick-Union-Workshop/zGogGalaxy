@@ -53,7 +53,7 @@ jobs:
  
       - name: Compile plugin
         run: |
-          cmake . --preset MP-Release -DPROJECT_VERSION="${{ inputs.version }}"
+          cmake . --preset MP-Release
           cmake --build --preset MP-Release
 
       - name: Find plugin
