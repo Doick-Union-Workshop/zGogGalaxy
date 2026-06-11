@@ -1,16 +1,12 @@
 #include <forward_list>
-#include <concepts>
-#include <list>
 #include <string_view>
 #include <type_traits>
 #include <array>
 #include <ranges>
 #include <vector>
 #include <algorithm>
-#include <type_traits>
 
 #define BetterDaedalusExternal(function) BetterDaedalusExternals::DaedalusExternal<#function,function>
-#define BetterDaedalusExternalWithName(name, function) BetterDaedalusExternals::DaedalusExternal<#name,function>
 #define BetterDaedalusExternalWithCondition(function, condition) BetterDaedalusExternals::DaedalusExternal<#function,function,condition>
 
 #define BetterExternalDefinition(parserPointer, ...)\
@@ -163,8 +159,7 @@ namespace GOTHIC_NAMESPACE
 
 			constexpr MappedInstance(const Key& t_key)
 				: m_key(t_key)
-			{
-			}
+			{}
 
 			//TODO use static constexpr Value& operator[] if MSVC will get this implemented
 			[[nodiscard]] static Value& Get(const Key& t_key)
@@ -173,23 +168,23 @@ namespace GOTHIC_NAMESPACE
 #define Likely	[[unlikely]]
 
 				const auto SameKey = [&t_key](const auto& t_object)
-					{
-						return t_object.m_key == t_key;
-					};
+				{
+					return t_object.m_key == t_key;
+				};
 
 				auto& value = [&]() -> Value&
+				{
+					if (const auto it = std::ranges::find_if(s_objects, SameKey);
+						it != End()) Likely
 					{
-						if (const auto it = std::ranges::find_if(s_objects, SameKey);
-							it != End()) Likely
-						{
-							return *it;
-						}
-						else Unlikely
-						{
-							return s_objects.emplace_back(Value{t_key});
-						}
+						return *it;
+					}
+					else Unlikely
+					{
+						return s_objects.emplace_back(Value{t_key});
+					}
 
-					}();
+				}();
 #undef Unlikely
 #undef Likely
 				return value;
@@ -208,9 +203,9 @@ namespace GOTHIC_NAMESPACE
 			static typename Container::iterator Find(const Key& t_key)
 			{
 				const auto SameKey = [&t_key](const auto& t_value)
-					{
-						return t_key == t_value.m_key;
-					};
+				{
+					return t_key == t_value.m_key;
+				};
 
 				return std::ranges::find_if(s_objects, SameKey);
 			}
@@ -358,9 +353,9 @@ namespace GOTHIC_NAMESPACE
 			static void ClearPool(const zCPar_DataStack* t_stack)
 			{
 				const auto ResetPool = [&t_stack](const auto& t_pool)
-					{
-						return std::addressof(t_pool.m_key->datastack) == t_stack;
-					};
+				{
+					return std::addressof(t_pool.m_key->datastack) == t_stack;
+				};
 
 				if (const auto it = FindIf(ResetPool); it != End())
 				{
@@ -516,8 +511,7 @@ namespace GOTHIC_NAMESPACE
 			constexpr ExternalTable(zCParser* const t_parser)
 				: m_parser(t_parser)
 
-			{
-			}
+			{}
 
 			constexpr void Define() const override
 			{

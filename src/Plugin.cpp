@@ -7,6 +7,8 @@
 #include <cstdint>
 #include <memory>
 
+#include "Utils/zDUtils/Logger/Logger.h"
+
 #ifdef __G1
 #define GOTHIC_NAMESPACE Gothic_I_Classic
 #define ENGINE Engine_G1

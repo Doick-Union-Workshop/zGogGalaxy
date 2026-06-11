@@ -53,7 +53,7 @@ namespace GOG
 
 		if (const auto err = galaxy::api::GetError())
 		{
-			static Utils::Logger* logger = Utils::CreateLogger("zGogGalaxy::GalaxyClient::Init");
+			static zDUtils::Logger* logger = zDUtils::CreateLogger("zGogGalaxy::GalaxyClient::Init");
 			logger->Error("GOG Galaxy not installed: {0}", err->GetMsg());
 			GogStatus = GogInitStatus::NOT_INSTALLED;
 		}
@@ -105,7 +105,7 @@ namespace GOG
 			return;
 		}
 
-		static Utils::Logger* logger = Utils::CreateLogger("zGogGalaxy::GalaxyClient::SignIn");
+		static zDUtils::Logger* logger = zDUtils::CreateLogger("zGogGalaxy::GalaxyClient::SignIn");
 
 		galaxy::api::User()->SignInGalaxy(online, 15U, this);
 
@@ -114,7 +114,8 @@ namespace GOG
 			logger->Error("Signing in failed: {0}", err->GetMsg());
 			GogStatus = GogInitStatus::PRODUCT_NOT_OWNED;
 		}
-		else if (online) {
+		else if (online)
+		{
 			GogStatus = GogInitStatus::IN_PROGRESS;
 		}
 		else
@@ -159,7 +160,7 @@ namespace GOG
 	{
 		GogStatus = GogInitStatus::OK;
 
-		static Utils::Logger* logger = Utils::CreateLogger("zGogGalaxy::GalaxyClient::OnAuthSuccess");
+		static zDUtils::Logger* logger = zDUtils::CreateLogger("zGogGalaxy::GalaxyClient::OnAuthSuccess");
 		logger->Info("GOG Galaxy successfully initialized");
 
 		GOG::galaxyStatsManager->QueryAchievements();
@@ -167,7 +168,7 @@ namespace GOG
 
 	void GalaxyClient::OnAuthFailure(galaxy::api::IAuthListener::FailureReason reason)
 	{
-		static Utils::Logger* logger = Utils::CreateLogger("zGogGalaxy::GalaxyClient::OnAuthFailure");
+		static zDUtils::Logger* logger = zDUtils::CreateLogger("zGogGalaxy::GalaxyClient::OnAuthFailure");
 
 		switch (reason)
 		{
@@ -195,7 +196,7 @@ namespace GOG
 		galaxy::api::User()->SignOut();
 		GogStatus = GogInitStatus::OFFLINE;
 
-		static Utils::Logger* logger = Utils::CreateLogger("zGogGalaxy::GalaxyClient::OnAuthLost");
+		static zDUtils::Logger* logger = zDUtils::CreateLogger("zGogGalaxy::GalaxyClient::OnAuthLost");
 		logger->Error("GOG Galaxy not initialized, call Init() first!");
 	}
 }

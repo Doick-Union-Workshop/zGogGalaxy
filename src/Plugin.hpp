@@ -128,14 +128,6 @@ namespace GOTHIC_NAMESPACE
 
 	}
 
-	BetterExternalDefinition(parser,
-		BetterDaedalusExternal(Gog_QueryAchievements),
-		BetterDaedalusExternal(Gog_StoreAchievements),
-		BetterDaedalusExternal(Gog_UnlockAchievement),
-		BetterDaedalusExternal(Gog_ClearAchievement),
-		BetterDaedalusExternal(Gog_ResetAchievements)
-	);
-
 	/*int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd);
 	auto Hook_WinMain = Union::CreateHook(reinterpret_cast<void*>(zSwitch(0x004F3E10, 0x00506810, 0x005000F0, 0x00502D70)), &WinMain, Union::HookType::Hook_Detours);
 	int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd)

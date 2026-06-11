@@ -24,4 +24,12 @@ namespace GOTHIC_NAMESPACE
 	{
 		GOG::galaxyStatsManager->ResetAchievements();
 	}
+
+	BetterExternalDefinition(parser,
+		BetterDaedalusExternal(Gog_QueryAchievements),
+		BetterDaedalusExternal(Gog_StoreAchievements),
+		BetterDaedalusExternal(Gog_UnlockAchievement),
+		BetterDaedalusExternal(Gog_ClearAchievement),
+		BetterDaedalusExternal(Gog_ResetAchievements)
+	);
 }
