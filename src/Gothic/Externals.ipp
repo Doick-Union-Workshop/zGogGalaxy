@@ -1,0 +1,38 @@
+#include "BetterDaedalusExternals.hpp"
+#include "Gog/GalaxyStatsManager.hpp"
+
+namespace GOTHIC_NAMESPACE
+{
+	void Gog_UnlockAchievement(const zSTRING& t_achievementName)
+	{
+		GOG::galaxyStatsManager->SetAchievement(t_achievementName.ToChar());
+	}
+
+	void Gog_ClearAchievement(const zSTRING& t_achievementName)
+	{
+		GOG::galaxyStatsManager->ClearAchievement(t_achievementName.ToChar());
+	}
+
+	void Gog_QueryAchievements()
+	{
+		GOG::galaxyStatsManager->QueryAchievements();
+	}
+
+	void Gog_StoreAchievements()
+	{
+		GOG::galaxyStatsManager->StoreAchievements();
+	}
+
+	void Gog_ResetAchievements()
+	{
+		GOG::galaxyStatsManager->ResetAchievements();
+	}
+
+	BetterExternalDefinition(parser,
+		BetterDaedalusExternal(Gog_QueryAchievements),
+		BetterDaedalusExternal(Gog_StoreAchievements),
+		BetterDaedalusExternal(Gog_UnlockAchievement),
+		BetterDaedalusExternal(Gog_ClearAchievement),
+		BetterDaedalusExternal(Gog_ResetAchievements)
+	);
+}
